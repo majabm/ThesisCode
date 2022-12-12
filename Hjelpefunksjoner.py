@@ -5,7 +5,7 @@ import scipy.linalg as sl
 from math import sin, cos, tan, sqrt
 from mpmath import cot
 
-from Master.Liegrupper import SO3, so3, Sp1, sp1, SE3, se3, UDQ, udq, SE3_Squared, se3_Squared, UDQ_2, udq_2, SE3N, se3N, UDQ_N, udq_N
+from Liegrupper import SO3, so3, Sp1, sp1, SE3, se3, UDQ, udq, SE3_Squared, se3_Squared, UDQ_2, udq_2, SE3N, se3N, UDQ_N, udq_N
 
 
 def identify_lie_group(name):
