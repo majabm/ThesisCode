@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import numpy as np
-from Test.C2_Problems import FRB, HeavyTop, Pendulum1Fold, Pendulum2Fold
-from Test.C2_Problems import PendulumNFold
+from Problems import FRB, Pendulum1Fold, Pendulum2Fold, PendulumNFold
 
 
 class RKMK:
