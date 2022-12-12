@@ -2,9 +2,9 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
-from Master.Problemer import FRB, Pendulum1Fold, Pendulum2Fold, PendulumNFold
-from Master.RKMK import RKMK
-from Master.Hjelpefunksjoner import find_folder
+from Problemer import FRB, Pendulum1Fold, Pendulum2Fold, PendulumNFold
+from RKMKmetoder import RKMK
+from Hjelpefunksjoner import find_folder
 
 directory = "C:/Users/Maja/OneDrive - NTNU/Documents/NTNU/V2022/Masteroppgave/Figurer//"
 
