@@ -5,7 +5,7 @@ import scipy.linalg as sl
 from math import sin, cos, tan, sqrt
 from mpmath import cot
 
-from Master.Hjelpefunksjoner import identify_lie_group, to_hat_matrix, from_hat_matrix, normalize
+from Hjelpefunksjoner import identify_lie_group, to_hat_matrix, from_hat_matrix, normalize
 
 
 
