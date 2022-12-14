@@ -5,9 +5,10 @@ import scipy.linalg as sl
 from math import sin, cos, tan, sqrt
 from mpmath import cot
 
-from Liegrupper import SO3, so3, Sp1, sp1, SE3, se3, UDQ, udq, SE3_Squared, se3_Squared, UDQ_2, udq_2, SE3N, se3N, UDQ_N, udq_N
+from Lie-groups import SO3, so3, Sp1, sp1, SE3, se3, UDQ, udq, SE3_Squared, se3_Squared, UDQ_2, udq_2, SE3N, se3N, UDQ_N, udq_N
 
 
+# identifies various Lie groups provided the name is not too badly misspelled
 def identify_lie_group(name):
     if name in ["SO(3)", "SO3", "so3", "so(3)", "So3", "So(3)"]:
         return SO3, so3
@@ -38,6 +39,8 @@ def identify_lie_group(name):
         return UDQ_N, udq_N
     else: print("Error: Cannot identyfy Lie group")
     
+
+% provides the order of a RK method provided the name is not too mangled
 def identify_order(name):
     if name in ["lie_euler", "Lie_Euler", "Lie_euler", "lie_Euler",
                 "lie-euler", "Lie-Euler", "Lie-euler", "lie-Euler",
@@ -54,6 +57,8 @@ def identify_order(name):
     else:
         print("Error: Method identification (order)")
         
+
+# returns the name of folder I have figures in 
 def find_folder(name):
     if name == "Euler's free rigid body":
         return "FRB/"
@@ -66,6 +71,8 @@ def find_folder(name):
     elif name == "N-fold 3D pendulum":
         return "PendulumNfold/"
 
+    
+# goes from a vector in R^3 to a skew symmetrix 3x3 matrix
 def to_hat_matrix(v):
     U = np.zeros((3,3))
     U[0,1] = -v[2]
@@ -74,6 +81,8 @@ def to_hat_matrix(v):
     A = U - np.transpose(U)
     return(A)
 
+
+# goes from a skew symmetric matrix to a vector in R^3
 def from_hat_matrix(A):  
     v = np.zeros(3)
     v[0] = -A[1,2]
@@ -81,6 +90,8 @@ def from_hat_matrix(A):
     v[2] = -A[0,1]
     return(v)
 
+
+# goes from a vector quaternion to a 4x4 matrix
 def to_sp1_matrix(u):
     u1, u2, u3 = u
     A = np.zeros((4,4))
@@ -91,6 +102,8 @@ def to_sp1_matrix(u):
     A = A - np.transpose(A)
     return A
 
+
+# finds the vector n=v/norm(v), or n=v if the norm is too close to zero
 def normalize(v):
     norm = np.linalg.norm(v)
     TOL = 1e-9
