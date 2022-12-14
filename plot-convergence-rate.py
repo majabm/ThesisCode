@@ -11,7 +11,7 @@ directory = "C:/Users/Maja/OneDrive - NTNU/Documents/NTNU/V2022/Masteroppgave/Fi
 
 # plots the convergence rate for a problem, given a Lie group and a coordinate map
 def test_convergence_rate(Prob, coord_map, method, k0, k, save = True):
-    ### TODO ###
+
     M = k + 1 - k0
     error = np.zeros(M)
     h_list = np.zeros(M)
@@ -23,7 +23,6 @@ def test_convergence_rate(Prob, coord_map, method, k0, k, save = True):
     y_ref = y[-1,:]
     
     klist = np.arange(k0, k+1)
-    #print(klist)
     
     for i in range(M):
         print(klist[i])
@@ -38,10 +37,7 @@ def test_convergence_rate(Prob, coord_map, method, k0, k, save = True):
     x = np.linspace(h_list[0], h_list[-1], k)
     
     plt.loglog(h_list, error, label = "Error")
-    #x = np.asarray([i for i in range(10)])
     n = identify_order(method)
-    #plt.loglog(x, x**2, linestyle = "dotted", label = "y = x^2")
-    #plt.loglog(x, x**3, linestyle = "dotted", label = "y = x^3")
     plt.loglog(x, x**n, linestyle = "dotted", label = "y = x^%i" % n)
     plt.title("Global error with respect to step size")
     plt.xlabel("Time step h")
