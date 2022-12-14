@@ -2,7 +2,7 @@
 
 import numpy as np
 from math import sqrt
-from Liegrupper import SO3, so3, Sp1, sp1, SE3, se3, UDQ, udq, SE3_Squared, se3_Squared, SE3N, se3N, UDQ_2, udq_2, UDQ_N, udq_N
+from Lie-groups import SO3, so3, Sp1, sp1, SE3, se3, UDQ, udq, SE3_Squared, se3_Squared, SE3N, se3N, UDQ_2, udq_2, UDQ_N, udq_N
 from Hjelpefunksjoner import identify_lie_group, to_hat_matrix
 
 class FRB: 
