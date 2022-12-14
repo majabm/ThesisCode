@@ -2,15 +2,15 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
-from RKMKmetoder import RKMK
-from Problemer import FRB, Pendulum1Fold, Pendulum2Fold, PendulumNFold
-from Hjelpefunksjoner import identify_order, find_folder
+from RKMK-methods import RKMK
+from physics-problems import FRB, Pendulum1Fold, Pendulum2Fold, PendulumNFold
+from various-functions import identify_order, find_folder
 
 directory = "C:/Users/Maja/OneDrive - NTNU/Documents/NTNU/V2022/Masteroppgave/Figurer//"
 
 
-
-def test_step_length(Prob, coord_map, method, k0, k, save = True):
+# plots the convergence rate for a problem, given a Lie group and a coordinate map
+def test_convergence_rate(Prob, coord_map, method, k0, k, save = True):
     ### TODO ###
     M = k + 1 - k0
     error = np.zeros(M)
@@ -58,6 +58,7 @@ def test_step_length(Prob, coord_map, method, k0, k, save = True):
     plt.show()
 
 
+# convergence rates for the different combinations of Lie groups and coordinate maps for FRB
 def compare_coordinate_maps_and_lie_groups(Prob, lie_groups, coord_maps, method, k0, k, save=True):
     # note that cay does not work for dual kvaternions 
     
@@ -109,11 +110,10 @@ def compare_coordinate_maps_and_lie_groups(Prob, lie_groups, coord_maps, method,
     plt.show()
     return 0
 
-#Prob = FRB("SO3")
-#compare_coordinate_maps_and_lie_groups(Prob, ["SO3", "Sp1"], ["exp", "ccsk", "cay"], 
-#                                       "rkmk4", 2, 14, True)
+#compare_coordinate_maps_and_lie_groups(FRB("SO3"), ["SO3", "Sp1"], ["exp", "ccsk", "cay"], "rkmk4", 2, 14, True)
 
 
+# convergence rates for the possible combinations of Lie groups and coordinate maps for the N-fold pendulum
 def compare_some_things_pendulum(N, method, k0, k, save = True):
     # note that cay does not work for dual kvaternions 
     
@@ -197,193 +197,4 @@ def compare_some_things_pendulum(N, method, k0, k, save = True):
     plt.show()
 
 # compare_some_things_pendulum(2, "le", 5, 14, True)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-def test_step_length_SYM(Prob, method, k0, k, save = True):
-    ### TODO ###
-    M = k + 1 - k0
-    error = np.zeros(M)
-    h_list = np.zeros(M)
-    
-    Nref = 10* (2**k)
-    Ref = SYM(Prob, Nref, 5)
-    Ref.numerical_approximation(method)    
-    y = Ref.get_solution()
-    y_ref = y[-1,:]
-    
-    klist = np.arange(k0, k+1)
-    #print(klist)
-    
-    for i in range(M):
-        print(klist[i])
-        N = 2**klist[i]
-        Sol = SYM(Prob, N, 5)
-        Sol.numerical_approximation(method)     
-        y = Sol.get_solution()
-        end_point = y[-1,:]
-        error[i] = np.linalg.norm(y_ref - end_point)
-        h_list[i] = Sol.tf/N
-    
-    x = np.linspace(h_list[0], h_list[-1], k)
-    
-    plt.loglog(h_list, error, label = "Error")
-    #x = np.asarray([i for i in range(10)])
-    n = identify_order(method)
-    #plt.loglog(x, x**2, linestyle = "dotted", label = "y = x^2")
-    #plt.loglog(x, x**3, linestyle = "dotted", label = "y = x^3")
-    plt.loglog(x, x**n, linestyle = "dotted", label = "y = x^%i" % n)
-    plt.title("Global error with respect to step size")
-    plt.xlabel("Time step h")
-    plt.ylabel("Error")
-    plt.legend()
-
-    if save:    
-        plotname = Sol.make_order_plot_name(2**k0, 2**k, Nref)
-    
-        probName = Prob.name
-        folder = find_folder(probName)
-        print(plotname)
-        plt.savefig(directory + folder + plotname + ".pdf")
-    plt.show()
-    
-#Prob = FRB("SO3")
-#Prob = FRB("Sp1")
-#Prob = HeavyTop("SE3")
-#Prob = Pendulum1Fold("SE3")
-#Prob = Pendulum1Fold("UDQ")
-#Prob = Pendulum2Fold("SE3^2")
-#Prob = Pendulum2Fold("UDQ^2")
-#Prob = PendulumNFold("SE3^N", 4)  # OBS: høy N betyr høyere k0 !!!
-#Prob = PendulumNFold("UDQ^N", 4)
-#test_step_length_SYM(Prob, "rkmk4", 2, 12, False)
-
-
-
-
-# what does thid plot even mean? Why did I make it?
-def compare_SYM(Prob, method, k0, k, save = True):
-    #Assumes lie_groups contain two elements
-    
-    M = k + 1 - k0
-    error = np.zeros(M)
-    h_list = np.zeros(M)
-    
-    klist = np.arange(k0, k+1)
-    
-    for i in range(M):
-        N = 2**klist[i]
-        Sol1 = RKMK(Prob, "ccsk", N, 5)
-        Sol1.numerical_approximation(method)     
-        y1 = Sol1.get_solution()
-        end_point1 = y1[-1,:]
-        Sol2 = SYM(Prob, N, 5)
-        Sol2.numerical_approximation(method)     
-        y2 = Sol2.get_solution()
-        end_point2 = y2[-1,:]
-        error[i] = np.linalg.norm(end_point1 - end_point2)
-        h_list[i] = Sol1.tf/N
-    plt.plot(h_list, error, label = "Error")
-    plt.xscale("log")
-    
-    probName = Prob.name
-    plt.title("Difference between STUFF " + probName + "\n")
-    plt.xlabel("Time step h")
-    plt.ylabel("Error")
-    plt.legend()
-    
-    if save:
-        plotname = Sol1.make_comparison_plot_name("Compare SYM", 2**k0, 2**k, "None")
-        print(plotname)
-        folder = find_folder(probName)
-        plt.savefig(directory + folder + plotname + ".pdf")
-    plt.show()
-#Prob = FRB("SO3")
-#compare_SYM(Prob, "rkmk4", 6, 12)
-
-
-def compare_order_SYM(Prob, method, k0, k, save = True):
-    ### TODO ###
-    M = k + 1 - k0
-    error = np.zeros(M)
-    h_list = np.zeros(M)
-    
-    Nref = 10* (2**k)
-    Ref = SYM(Prob, Nref, 5)
-    #Ref = RKMK(Prob, "ccsk", Nref, 5)
-    Ref.numerical_approximation(method)    
-    y = Ref.get_solution()
-    y_ref = y[-1,:]
-    
-    klist = np.arange(k0, k+1)
-    #print(klist)
-    
-    for i in range(M):
-        print(klist[i])
-        N = 2**klist[i]
-        Sol = RKMK(Prob, "ccsk", N, 5)
-        Sol.numerical_approximation(method)     
-        y = Sol.get_solution()
-        end_point = y[-1,:]
-        error[i] = np.linalg.norm(y_ref - end_point)
-        h_list[i] = Sol.tf/N
-    
-    x = np.linspace(h_list[0], h_list[-1], k)
-    plt.loglog(h_list, error, label = "Error")
-    
-    for i in range(M):
-        print(klist[i])
-        N = 2**klist[i]
-        Sol = SYM(Prob, N, 5)
-        Sol.numerical_approximation(method)     
-        y = Sol.get_solution()
-        end_point = y[-1,:]
-        error[i] = np.linalg.norm(y_ref - end_point)
-        h_list[i] = Sol.tf/N
-    
-    x = np.linspace(h_list[0], h_list[-1], k)
-    
-    plt.loglog(h_list, error, label = "Error SYM")
-    #x = np.asarray([i for i in range(10)])
-    n = identify_order(method)
-    #plt.loglog(x, x**2, linestyle = "dotted", label = "y = x^2")
-    #plt.loglog(x, x**3, linestyle = "dotted", label = "y = x^3")
-    plt.loglog(x, x**n, linestyle = "dotted", label = "y = x^%i" % n)
-    plt.title("Global error with respect to step size")
-    plt.xlabel("Time step h")
-    plt.ylabel("Error")
-    plt.legend()
-
-    if save:    
-        plotname = Sol.make_order_plot_name(2**k0, 2**k, Nref)
-    
-        probName = Prob.name
-        folder = find_folder(probName)
-        print(plotname)
-        plt.savefig(directory + folder + "SYM (alt)" + plotname + ".pdf")
-    plt.show()
-    
-#Prob = FRB("SO3")
-#compare_order_SYM(Prob, "rkmk4", 2, 14)# -*- coding: utf-8 -*-
 
