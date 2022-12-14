@@ -3,8 +3,10 @@
 import numpy as np
 from math import sqrt
 from Lie-groups import SO3, so3, Sp1, sp1, SE3, se3, UDQ, udq, SE3_Squared, se3_Squared, SE3N, se3N, UDQ_2, udq_2, UDQ_N, udq_N
-from Hjelpefunksjoner import identify_lie_group, to_hat_matrix
+from various-functions import identify_lie_group, to_hat_matrix
 
+
+# this class describes the physical problem known as Euler's free rigid body
 class FRB: 
     name = "Euler's free rigid body"
     manifold = "S^2"
@@ -81,6 +83,7 @@ class FRB:
             print("Error, frb, Lambda")
 
 
+# this class includes the things that are needed to solve the 1-fold pendulum numerically
 class Pendulum1Fold:
     name = "1-fold 3D pendulum"
     manifold = "TS^2"
@@ -175,6 +178,7 @@ class Pendulum1Fold:
             print("Error, 1-fold pendulum, Lambda")
 
 
+# this class includes the things that are needed to solve the 2-fold pendulum numerically
 class Pendulum2Fold:
     name = "2-fold 3D pendulum"
     manifold = "(TS^2)^2"
@@ -341,6 +345,7 @@ class Pendulum2Fold:
             print("Error. 2-fold pendulum, Lambda")    
 
 
+# this class includes the things that are needed to solve the N-fold pendulum numerically
 class PendulumNFold:
     name = "N-fold 3D pendulum"
     manifold = "(TS^2)^N"
