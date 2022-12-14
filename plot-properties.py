@@ -41,42 +41,6 @@ def plot_frb_momentum(method, N, tf, save=True):
     plt.savefig(directory + folder + plotname + ".pdf", bbox_inches = "tight")
     
     plt.show()
-
-
-# plots q1^Tq1 for the 1-fold pendulum as a function of number of steps
-def plot_norm_of_q_1_fold_pendulum(Sol):
-    y0 = Sol.Problem.get_init()
-    q0, w0 = np.split(y0, 2)
-    
-    # numerical solution
-    y = Sol.get_solution()
-    q, w = np.hsplit(y, 2)
-    norm = np.multiply(q, q) 
-    norm = norm.sum(axis = 1)
-    plt.plot(1 - norm)
-    
-    plotname = Sol.make_plot_name("qTq")
-    #print(plotname)
-    plt.savefig(directory + "Pendulum1fold/" + plotname)
-    plt.show()
-    
-
-def plot_q_w_1_fold_pendulum(Sol):
-    y0 = Sol.Problem.get_init()
-    q0, w0 = np.split(y0, 2)
-    
-    # numerical solution
-    y = Sol.get_solution()
-    q, w = np.hsplit(y, 2)
-    qTw = np.multiply(q, w) 
-    qTw = qTw.sum(axis = 1)
-    plt.plot(qTw)
-    
-    plotname = Sol.make_plot_name("qTw")
-    #print(plotname)
-    plt.savefig(directory + "Pendulum1fold/" + plotname)
-    plt.show()
-    plt.show()
    
 
 # plots qi^Tqi for the 2-fold pendulum as a function of number of steps
@@ -127,7 +91,7 @@ def plot_qTq_2fold(method, N, i, save = True):
     plt.show()
 
     
-# plots qi^Tii for the 2-fold pendulum as a function of number of steps 
+# plots qi^Twi for the 2-fold pendulum as a function of number of steps 
 def plot_qTw_2fold(method, N, i, save = True):
     Prob = Pendulum2Fold("se3^2")
     Prob.set_init_1(np.asarray([0,1,0,1,0,1]))
@@ -176,6 +140,4 @@ def plot_qTw_2fold(method, N, i, save = True):
         plt.savefig(directory + "Pendulum2fold/" + plotname + 
                     ", i=" + str(i) + ".pdf", bbox_inches = "tight")
     plt.show()
-
-
 
