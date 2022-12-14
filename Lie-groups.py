@@ -5,10 +5,10 @@ import scipy.linalg as sl
 from math import sin, cos, tan, sqrt
 from mpmath import cot
 
-from Hjelpefunksjoner import identify_lie_group, to_hat_matrix, from_hat_matrix, normalize
+from various-functions import identify_lie_group, to_hat_matrix, from_hat_matrix, normalize
 
 
-
+# This describes the Lie group SO(3)
 class SO3:
     name = "SO(3)"
     
@@ -26,6 +26,8 @@ class SO3:
     def identity(self):
         return SO3(np.eye(3))
 
+
+# This describes the Lie algebra so(3)
 class so3:
     u = np.zeros(3)
     
@@ -142,44 +144,6 @@ class so3:
         B = A.dot(y) 
         return so3(B)
     
-    def ccsk321(self):
-        a1, a2, a3 = self.get_vec()
-        E1 = np.eye(3)
-        c1, c2, c3 = cos(a1), cos(a2), cos(a3)
-        s1, s2, s3 = sin(a1), sin(a2), sin(a3)
-        E1[1,1] = c1  
-        E1[2,2] = c1
-        E1[1,2] = -s1
-        E1[2,1] = s1
-        E2 = np.eye(3)
-        E2[0,0] = c2
-        E2[2,2] = c2
-        E2[0,2] = s2
-        E2[2,0] = -s2
-        E3 = np.eye(3)
-        E3[0,0] = c3 
-        E3[1,1] = c3
-        E3[0,1] = -s3
-        E3[1,0] = s3
-        E = E3.dot(E2.dot(E1))
-        return SO3(E)
-    
-    def dccskinv321(self, v):
-        x1, x2, x3 = self.get_vec()
-        c1, c2, c3 = cos(x1), cos(x2), cos(x3)
-        s1, s2, s3 = sin(x1), sin(x2), sin(x3)
-        t2 = tan(x2)
-        y = v.get_vec()
-        A = np.eye(3)
-        A[0,0] = c3/c2
-        A[1,1] = c3
-        A[0,1] = s3/c2 
-        A[1,0] = -s3
-        A[2,1] = s2*s3/c2
-        A[2,0] = c3*s2/c2
-        B = A.dot(y) 
-        return so3(B)
-    
     def Phi(self, name):
         if name in ["exp", "Exp"]:
             return self.exp()
@@ -199,24 +163,9 @@ class so3:
             return self.dccskinv(v)
         else:
             print('Error in differential of coordinate map')
-            
-    def Phi_SYM(self, nr):
-        if nr==1:
-            return self.ccsk()
-        elif nr==2:
-            return self.ccsk321()
-        else:
-            print('Error in coordinate map (SYM)')
-        
-    def dPhiinv_SYM(self, v, nr):
-        if nr==1:
-            return self.dccskinv(v)
-        elif nr==2:
-            return self.dccskinv321(v)
-        else:
-            print('Error in differential of coordinate map (SYM)')
 
 
+# This describes the Lie group Sp(1)
 class Sp1:
     name = "Sp(1)"
     
@@ -262,6 +211,8 @@ class Sp1:
     def identity(self):
         return Sp1(1, np.zeros(3))
                 
+
+# This describes the Lie algebra sp(1)
 class sp1:
     q = np.zeros(3)
     
@@ -368,12 +319,9 @@ class sp1:
             return self.dccskinv(v)
         else:
             print('Error in differential of coordinate map')
-            
-def Lambda(Q, b):
-    q0, q = Q.get_components()
-    B = 2*(q.dot(b))*q + (q0**2 - q.dot(q))*b + 2*q0 * np.cross(q, b)
-    return B
 
+            
+# This describes the Lie group SE(3)
 class SE3:
     name = "SE(3)"
     
@@ -403,6 +351,8 @@ class SE3:
     def identity(self):
         return SE3([np.eye(3), np.zeros(3)])
 
+    
+# This describes the Lie algebra se(3)
 class se3:
     u = np.zeros(6)
     
@@ -582,7 +532,8 @@ class se3:
         else:
             print('Error in differential of coordinate map')
             
-
+            
+# This describes the Lie group of unit dual quaterions
 class UDQ:
     name = "Unit dual quaternions"
         
@@ -630,7 +581,8 @@ class UDQ:
     def identity(self):
         return UDQ(1, np.zeros(3), 0, np.zeros(3))
 
-
+    
+# This describes the Lie algebra belonging to unit dual quaterions
 class udq:
     q = np.zeros(6)
     
@@ -760,6 +712,7 @@ class udq:
             print('Error in differential of coordinate map')
 
 
+# This describes the Lie group (SE(3))^2
 class SE3_Squared:
     name = "SE(3)^2"
     
@@ -787,6 +740,7 @@ class SE3_Squared:
         return SE3_Squared([A.identity(), A.identity()])
         
 
+# This describes the Lie algebra (se(3))^2
 class se3_Squared:
     u = np.zeros(12)
     
@@ -872,6 +826,7 @@ class se3_Squared:
             print('Error in differential of coordinate map')
 
 
+# This describes the Lie group (SE(3))^N
 class SE3N:
     name = "SE(3)^N"
     
@@ -889,7 +844,8 @@ class SE3N:
         for elem in self.SE3_elements:
             elem.print()
         
-
+        
+# This describes the Lie algebra (se(3))^N
 class se3N:
     def __init__(self, x):
         self.N = int(len(x)/6)
@@ -999,6 +955,7 @@ class se3N:
             print('Error in differential of coordinate map')
             
 
+# This describes the Lie group of (unit dual quaterions)^2
 class UDQ_2:
     name = "(UDQ)^2"
         
@@ -1025,6 +982,7 @@ class UDQ_2:
         return UDQ_2([self.A.identity(), self.A.identity()])
     
     
+# This describes the Lie algebra belonging to (unit dual quaterions)^2    
 class udq_2:
     q = np.zeros(12)
     
@@ -1095,7 +1053,9 @@ class udq_2:
             return self.dccskinv(v)
         else:
             print('Error in differential of coordinate map')
-
+            
+            
+# This describes the Lie group of (unit dual quaterions)^N
 class UDQ_N:
     name = "(UDQ)^N"
     
@@ -1112,7 +1072,9 @@ class UDQ_N:
     def print(self):
         for elem in self.UDQ_elements:
             elem.print()
-
+            
+            
+# This describes the Lie algebra beloning to (unit dual quaterions)^N
 class udq_N:
     def __init__(self, x):
         self.N = int(len(x)/6)
