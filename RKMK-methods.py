@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 
 import numpy as np
-from Problems import FRB, Pendulum1Fold, Pendulum2Fold, PendulumNFold
+from physics-problems import FRB, Pendulum1Fold, Pendulum2Fold, PendulumNFold
 
 
+# this class contains contains the necessary functions to use the three RKMK methods Lie Euler, Heun Euler, and RKMK4
 class RKMK:
     Problem = FRB("SO(3)")
     N = 1000
@@ -98,8 +99,7 @@ class RKMK:
             self.method = "Lie Euler"
             return self.lie_euler
         if name in ["improved lie euler", "improved Lie Euler",
-                    "impr lie euler", "impr Lie Euler",
-                    "impr", "Impr", "ile", "iLE"]:
+                    "ile", "iLE", "heun euler", "Heun Euler", "HE", "he"]:
             self.method = "Heun Euler"
             return self.improved_lie_euler
         if name in ["rkmk4", "mkrk4", "MKRK4", "RKMK4", "mk4", "MK4, rkmk, mkrk"]:
